@@ -1,0 +1,34 @@
+#!/bin/bash --login
+# Walltime in hh:mm:ss
+#PBS -l walltime=01:00:00
+# Number of nodes (select) and cores (ncpus)
+#PBS -l select=1:ncpus=36
+# Job title
+#PBS -N anosim
+# Budget code
+#PBS -A d411-training
+# Join standard and error out
+#PBS -j oe
+
+### start of script
+
+echo "setting temporary directory"
+mkdir -p ~/qiime_tmp
+export TMPDIR=~/qiime_tmp
+
+echo "loading virtual environment"
+conda deactivate
+conda activate qiime1
+
+echo "creating and cd to output directory"
+mkdir -p ~/outputAntonis/anosim/
+cd ~/outputAntonis/anosim/
+
+# insert your QIIME code here
+
+compare_categories.py --method anosim -i ~/outputAntonis/data_analysis_deeper/data_analysis/bdiv_even60000/unweighted_unifrac_dm.txt -m ~/mappingfileAntonis.tsv -c Description -o unweighted_anosim_out -n 999
+
+echo "deactivating environment"
+conda deactivate
+
+### end of script
