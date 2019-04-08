@@ -1,0 +1,42 @@
+#!/bin/bash --login
+# Walltime in hh:mm:ss
+#PBS -l walltime=01:00:00
+# Number of nodes (select) and cores (ncpus)
+#PBS -l select=1:ncpus=36
+# Job title
+#PBS -N data_analysis
+# Budget code
+#PBS -A d411-training
+# Join standard and error out
+#PBS -j oe
+
+### start of script
+
+echo "setting temporary directory"
+mkdir -p ~/qiime_tmp
+export TMPDIR=~/qiime_tmp
+
+echo "loading virtual environment"
+conda deactivate
+conda activate qiime1
+
+echo "creating and cd to output directory"
+mkdir -p ~/output/data_analysis/
+cd ~/output/data_analysis/
+
+# insert your QIIME code here
+
+core_diversity_analyses.py \
+-i ~/output/OTUpicking/otus/otu_table.biom \
+-m ~/mappingfile.tsv   \
+-t ~/output/OTUpicking/otus/97_otus.tree \
+-o data_analysis \
+-e 60000 \
+-a -O 36 \
+--recover_from_failure
+
+
+echo "deactivating environment"
+conda deactivate
+
+### end of script
