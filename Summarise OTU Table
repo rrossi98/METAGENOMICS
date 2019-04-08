@@ -1,0 +1,34 @@
+#!/bin/bash --login
+# Walltime in hh:mm:ss
+#PBS -l walltime=00:10:00
+# Number of nodes (select) and cores (ncpus)
+#PBS -l select=1:ncpus=36
+# Job title
+#PBS -N summarize_OTU_table 
+# Budget code
+#PBS -A d411-training
+# Join standard and error out
+#PBS -j oe
+
+### start of script
+
+echo "setting temporary directory"
+mkdir -p ~/qiime_tmp
+export TMPDIR=~/qiime_tmp
+
+echo "loading virtual environment"
+conda deactivate
+conda activate qiime1
+
+echo "creating and cd to output directory"
+mkdir -p ~/output/OTUpicking/otus/
+cd ~/output/OTUpicking/otus/
+
+# insert your QIIME code here
+
+biom summarize-table -i ~/output/OTUpicking/otus/otu_table.biom -o otu_table_summary.txt
+
+echo "deactivating environment"
+conda deactivate
+
+### end of script
